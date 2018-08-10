@@ -15,6 +15,7 @@ class Game
   end
 
   def start #CLI 0, 1, 2 players. X starts.
+    binding.pry
    puts "Welcome to Tic Tac Toe! Enter the number of players you would like to have: 0, 1, or 2:"
      input = gets.to_i
    case input
