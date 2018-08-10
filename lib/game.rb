@@ -11,7 +11,7 @@ class Game
   def initialize (player_1 = Players::Human.new("X"), player_2 = Players::Human.new("O"), board = Board.new)
     @board = board
     @player_1 = player_1
-    #@player_2 = player_2
+    @player_2 = player_2
   end
 
   def start #CLI 0, 1, 2 players. X starts.
