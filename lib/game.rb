@@ -14,25 +14,74 @@ class Game
     @player_2 = player_2
   end
 
-  def current_player #Returns correct player (X = 3rd move). 1st move is X, 2nd is O,...
-    #Need to determine which turn (turn_count) to be able to determine the current player (refer to the method I just created in the board class).
-    #self.board.turn_count => this will return the number of turns only!!
-    #even == 1st player and odd == second player!
-    if @board.turn_count.odd?
-      player_2
-    else #@board.turn_count.even?
-      player_1
-  end
-end
+  def start #CLI 0, 1, 2 players. X starts.
+   puts "Welcome to Tic Tac Toe! Enter the number of players you would like to have: 0, 1, or 2:"
+     input = gets.to_i
+   case input
+     when 0
+       self.computer
+     when 1
+       self.computerhuman
+     when 2
+       self.humanhuman
+     else
+       start
+     end
+   end
 
+ def computer
+     puts "Enjoy the game between 2 Computers"
+     @player_1 = Computer.new("X")
+     @player_1.board = self.board
+     @player_2 = Computer.new("O")
+     @player_2.board = self.board
+     self.play
+     self.again?
+ end
+
+ def computerhuman
+   puts "Select your token: X or O."
+   input = gets.chomp.upcase
+   if input == "X"
+     @player_2 = Computer.new("O")
+     @player_2.board = self.board
+   elsif input == "O"
+     @player_1 = Computer.new("X")
+     @player_1.board = self.board
+   else
+     self.start
+   end
+     self.play
+     self.again?
+ end
+
+ def humanhuman
+   self.play
+   self.again?
+ end 
+
+ def again?
+  if over?
+   puts "Would you like to play again? Type y or n."
+   input = gets.chomp.downcase
+     if input ==  "y"
+       self.board.reset!
+       self.start
+     elsif input == "n"
+       return "Good bye"
+       exit
+     else again?
+     end
+   end
+ end
+
+  def current_player #Returns correct player (X = 3rd move). 1st move is X, 2nd is O,...Need to determine which turn (turn_count) to be able to determine the current player (refer to the method I just created in the board class).Self.board.turn_count => this will return the number of turns only!!Even == 1st player and odd == second player!
+    @board.turn_count.odd? ? player_2 : player_1
+  end
 
   def won? #Draw? = False ELSE Won? Winning Combo (WINNNING COMBINATIONS)
-  #  WIN_COMBINATIONS.detect do |win|
-    #  @board.cells[win[0]] == @board.cells[win[1]] &&
-    #  @board.cells[win[1]] == @board.cells[win[2]]
     WIN_COMBINATIONS.detect do |win| #Detect or find
-      win.all?{|x| @board.cells[x] == "X"} || #.all? returns T if each block never returns false or nil
-      #Comparing the WIN_COMBINATIONS to the board.cells
+      win.all?{|x| @board.cells[x] == "X"} || #.all? returns T if each block never returns false or nil. Comparing the WIN_COMBINATIONS to the board.cells
       win.all?{|o| @board.cells[o] == "O"}
     end
   end
@@ -42,7 +91,11 @@ end
   end
 
   def over? #draw or won
-    self.draw? || self.won?
+    if draw? || won?
+      return true
+    else
+      false
+    end
   end
 
   def winner #X if X, o if O, nil if none. Need to use won? as helper method to determine first IF the game is won. Then need to return the player token.
@@ -71,7 +124,4 @@ end
       puts "Cat's Game!"
     end
   end
-
-    #Ask for input
-    #CHECKS IF OVER? after check turn. False or true. If false, keep playing.
 end
