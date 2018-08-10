@@ -59,7 +59,7 @@ class Game
  def humanhuman
    self.play
    self.again?
- end 
+ end
 
  def again?
   if over?
